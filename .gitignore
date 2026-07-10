@@ -1,0 +1,5 @@
+__pycache__
+.git
+.vs
+test-output-nonqt-absl
+test-output-qt-msvc

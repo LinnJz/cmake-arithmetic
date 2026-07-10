@@ -1,0 +1,48 @@
+[project]
+main_name = "NonQtAbslPresetCheck"
+sub_name = ""
+version = "1.0.0"
+description = "Non-Qt preset build check with absl"
+homepage_url = ""
+languages = ["CXX"]
+cxx_standard = 23
+target_type = "executable"
+
+[features]
+include_third_party = false
+link_what_you_use = true
+win32_executable = false
+macos_bundle = false
+
+[presets]
+compilers = ["msvc"]
+default_compiler = "msvc"
+build_types = ["Debug"]
+arch = "x64"
+generator = "Ninja"
+toolset = "v145"
+msvc_runtime = "MD"
+binary_dir = "${sourceDir}/out/build/${presetName}"
+install_dir = "${sourceDir}/out/install/${presetGroup}"
+generate_build_presets = true
+generate_test_presets = false
+use_sanitizers = false
+
+[vcpkg]
+root = "E:/Development/vcpkg"
+static_triplet = "x64-windows-static-md"
+dynamic_triplet = "x64-windows"
+
+[qt]
+enabled = false
+components = ["Widgets"]
+qml_debug = false
+
+[dependencies]
+
+[[dependencies.vcpkg_packages]]
+name = "absl"
+linkage = "STATIC"
+required = true
+config = true
+target_libraries = ["absl::strings"]

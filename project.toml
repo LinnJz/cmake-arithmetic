@@ -1,0 +1,66 @@
+[project]
+main_name = "Parser"
+sub_name = ""
+version = "1.0.0"
+description = ""
+homepage_url = ""
+languages = ["CXX"]
+cxx_standard = 23
+target_type = "executable" # executable | library
+
+[features]
+include_third_party = false
+link_what_you_use = true
+win32_executable = true
+macos_bundle = true
+
+[presets]
+# Non-Qt mode uses these compilers. Qt mode uses [qt].compiler/[qt].compilers
+# unless those are omitted, then it falls back to default_compiler.
+compilers = ["msvc", "clang", "gcc", "clang-cl"]
+default_compiler = "msvc"
+build_types = ["Debug", "RelWithDebInfo", "Release"]
+arch = "x64"
+generator = "Ninja"
+toolset = "v145"
+msvc_runtime = "MD" # MD | MT
+binary_dir = "${sourceDir}/out/build/${presetName}"
+install_dir = "${sourceDir}/out/install/${presetGroup}"
+generate_build_presets = true
+generate_test_presets = false
+use_sanitizers = false
+
+[vcpkg]
+# root = "E:/Development/vcpkg"
+# static_triplet = "x64-windows-static-md"
+# dynamic_triplet = "x64-windows"
+
+[qt]
+enabled = false
+# sdk_dir = "E:/Qt/6.6.2/msvc2019_64"
+# compiler = "msvc"
+# compilers = ["msvc"]
+components = ["Widgets"]
+qml_debug = true
+
+[dependencies]
+# target_libraries = ["Qt${QT_VERSION_MAJOR}::Widgets"]
+# compile_definitions = [
+#   "PROJECT_DIRECTORY=\"${CMAKE_CURRENT_SOURCE_DIR}\"",
+# ]
+# copy_dynamic_libraries = ["grpc*", "cryptopp*"]
+
+# [[dependencies.vcpkg_packages]]
+# name = "grpc"
+# linkage = "DYNAMIC"
+# required = true
+# config = true
+# target_libraries = ["gRPC::grpc++"]
+
+# [[dependencies.find_packages]]
+# name = "OpenSSL"
+# required = true
+# config = true
+
+# [dependencies.system_libraries]
+# windows = ["rpcrt4", "usp10", "dwrite"]
