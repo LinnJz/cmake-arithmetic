@@ -17,7 +17,7 @@ macos_bundle = false
 [presets]
 compilers = ["msvc"]
 default_compiler = "msvc"
-build_types = ["Debug"]
+build_types = ["Debug", "RelWithDebInfo", "Release"]
 arch = "x64"
 generator = "Ninja"
 toolset = "v145"

@@ -284,28 +284,36 @@ def public_presets(model: ProjectModel) -> dict[str, Any]:
                 "CMAKE_FIND_PACKAGE_PREFER_CONFIG": "ON",
                 "USE_SANITIZERS": cmake_bool(model.use_sanitizers),
             },
-        },
-        {
-            "name": "non-qt-base",
-            "hidden": True,
-            "inherits": "base",
-            "cacheVariables": {"QT_SUPPORT": "OFF"},
-        },
-        {
-            "name": "qt-base",
-            "hidden": True,
-            "inherits": "base",
-            "cacheVariables": {
-                "QT_SUPPORT": "ON",
-                "CMAKE_PREFIX_PATH": "$env{QTDIR}",
-            },
-            "vendor": {
-                "qt-project.org/Qt": {
-                    "description": "Qt SDK is supplied by CMakeUserPresets.json"
-                }
-            },
-        },
+        }
     ]
+
+    if model.qt_enabled:
+        configure_presets.append(
+            {
+                "name": "qt-base",
+                "hidden": True,
+                "inherits": "base",
+                "cacheVariables": {
+                    "QT_SUPPORT": "ON",
+                    "CMAKE_PREFIX_PATH": "$env{QTDIR}",
+                },
+                "vendor": {
+                    "qt-project.org/Qt": {
+                        "description": "Qt SDK is supplied by CMakeUserPresets.json"
+                    }
+                },
+            }
+        )
+    else:
+        configure_presets.append(
+            {
+                "name": "non-qt-base",
+                "hidden": True,
+                "inherits": "base",
+                "cacheVariables": {"QT_SUPPORT": "OFF"},
+            }
+        )
+
     configure_presets.extend(
         compiler_base_preset(compiler, model) for compiler in model.preset_compilers
     )
@@ -435,10 +443,12 @@ def user_presets(model: ProjectModel) -> dict[str, Any]:
 
 
 def write_json(path: Path, value: dict[str, Any]) -> None:
-    path.write_text(
+    tmp_path = path.with_name(f"{path.name}.tmp")
+    tmp_path.write_text(
         json.dumps(value, indent=2, ensure_ascii=False) + "\n",
         encoding="utf-8",
     )
+    tmp_path.replace(path)
     print(f"  Generated: {path}")
 
 
@@ -583,6 +593,14 @@ def remove_output_dir(output_dir: Path, template_dir: Path) -> None:
         shutil.rmtree(output_dir)
 
 
+def remove_copied_preset_files(output_dir: Path) -> None:
+    for preset_name in ["CMakePresets.json", "CMakeUserPresets.json"]:
+        preset_path = output_dir / preset_name
+        if preset_path.exists():
+            preset_path.unlink()
+            print(f"  Removed copied template preset: {preset_path}")
+
+
 def generate_project(args: argparse.Namespace) -> None:
     config = load_config(args.config)
     model = build_model(config)
@@ -608,10 +626,11 @@ def generate_project(args: argparse.Namespace) -> None:
     remove_output_dir(output_dir, template_dir)
     shutil.copytree(template_dir, output_dir)
     print(f"\nCopied template to: {output_dir}")
+    remove_copied_preset_files(output_dir)
 
     replacements = make_replacements(model)
     for file_path in output_dir.rglob("*"):
-        if file_path.is_file() and file_path.suffix.lower() in {".cmake", ".txt", ".json"}:
+        if file_path.is_file() and file_path.suffix.lower() in {".cmake", ".txt"}:
             replace_in_file(file_path, replacements)
 
     if model.sub_dir != "src":
