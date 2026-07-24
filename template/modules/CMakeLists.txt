@@ -1,10 +1,10 @@
-﻿cmake_minimum_required(VERSION 3.30)
+cmake_minimum_required(VERSION 3.30)
 
-project(#{SUB_PROJECT_NAME}
-    VERSION #{SUB_PROJECT_VERSION}
-    DESCRIPTION "#{SUB_PROJECT_DESCRIPTION}"
-    HOMEPAGE_URL "#{PROJECT_HOMEPAGE_URL}"
-    LANGUAGES #{PROJECT_LANGUAGES}
+project(math
+    VERSION 1.0.0
+    DESCRIPTION ""
+    HOMEPAGE_URL ""
+    LANGUAGES C CXX
 )
 
 # 1. 文件包含
@@ -36,8 +36,8 @@ set(PROJECT_SOURCES
 # 2. 添加项目 输出模式 add_executable/add_library
 if(QT_SUPPORT)
 	if (${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-        if(NOT "#{TARGET_TYPE}" STREQUAL "EXE")
-            add_library(${PROJECT_NAME} #{TARGET_TYPE} ${PROJECT_SOURCES})
+        if(NOT "EXE" STREQUAL "EXE")
+            add_library(${PROJECT_NAME} EXE ${PROJECT_SOURCES})
         else()
             qt_add_executable(${PROJECT_NAME} MANUAL_FINALIZATION ${PROJECT_SOURCES})
         endif()
@@ -54,17 +54,17 @@ if(QT_SUPPORT)
             FILES ${resource_files}
         )
     else ()
-        if(NOT "#{TARGET_TYPE}" STREQUAL "EXE")
+        if(NOT "EXE" STREQUAL "EXE")
             qt5_add_big_resources(PROJECT_SOURCES ${PROJECT_NAME}.qrc)
-            add_library(${PROJECT_NAME} #{TARGET_TYPE} ${PROJECT_SOURCES})
+            add_library(${PROJECT_NAME} EXE ${PROJECT_SOURCES})
         else()
             qt5_add_big_resources(PROJECT_SOURCES ${PROJECT_NAME}.qrc)
             add_executable(${PROJECT_NAME} ${PROJECT_SOURCES})
         endif()
     endif ()
 else ()
-	if(NOT "#{TARGET_TYPE}" STREQUAL "EXE")
-		add_library(${PROJECT_NAME} #{TARGET_TYPE} ${PROJECT_SOURCES})
+	if(NOT "EXE" STREQUAL "STATIC")
+		add_library(${PROJECT_NAME} STATIC ${PROJECT_SOURCES})
 	else()
 		add_executable(${PROJECT_NAME} ${PROJECT_SOURCES})
 	endif()
@@ -72,16 +72,18 @@ endif ()
 
 # 1.1 自动刷新修改，推荐使用
 target_sources(${PROJECT_NAME} PRIVATE
-     main.cpp
-#     $<$<PLATFORM_ID:Windows>:src/windows_impl.cpp>
-#     $<$<PLATFORM_ID:Linux>:src/linux_impl.cpp>
+     math.cpp
 )
-
-# 2.1 模块依赖（一个项目只能有一个std module，或许应该提到全局CMakeLists.txt？）
-# if(CMAKE_CXX_STANDARD GREATER_EQUAL 20)
-#     include(../cmake/CxxModules.cmake)
-# endif()
+# 2.1 模块依赖 — math 是库，由主目标 MyApp 统一编译 std.ixx
+# 这里不 include CxxModules.cmake，避免重复编译 std 模块
 include(../cmake/TargetCompilerFlags.cmake)
+
+target_sources(${PROJECT_NAME} PRIVATE
+     FILE_SET ${PROJECT_NAME}
+     TYPE CXX_MODULES
+     BASE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}"
+     FILES "math.cppm"
+)
 
 # 3. 包含路径
 # target_include_directories(${PROJECT_NAME} PRIVATE
@@ -91,15 +93,12 @@ include(../cmake/TargetCompilerFlags.cmake)
 #     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Src>
 # )
 
-# 4. 三方库依赖
-include(Dependencies.cmake)
-
 # 5. 修改或添加目标（target）属性的命令。它的作用是让你在创建目标（如通过 add_executable 或 add_library）之后，单独调整该目标的编译、链接、调试等行为
 set_target_properties(${PROJECT_NAME} PROPERTIES
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
-    MACOSX_BUNDLE #{MACOS_BUNDLE}
-    WIN32_EXECUTABLE #{WIN32_EXECUTABLE} # ON close console
+    MACOSX_BUNDLE OFF
+    WIN32_EXECUTABLE OFF # ON close console
     LINK_WHAT_YOU_USE ON
 	# 仅使用 Visual Studio 生成器时生效，默认Ninja 不生效
     # VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>"
@@ -132,7 +131,7 @@ install(TARGETS ${PROJECT_NAME}
     ARCHIVE DESTINATION "${PROJECT_INSTALL_ARCHIVE_DIR}"
 )
 
-if(NOT "#{TARGET_TYPE}" STREQUAL "EXE")
+if(NOT "EXE" STREQUAL "EXE")
     install(
         DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/"
         DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}"

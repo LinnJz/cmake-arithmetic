@@ -1,66 +1,44 @@
 [project]
-main_name = "Parser"
-sub_name = ""
+name = "MyApp"
 version = "1.0.0"
 description = ""
 homepage_url = ""
-languages = ["CXX"]
+languages = ["C","CXX"]
+c_standard = 23
 cxx_standard = 23
-target_type = "executable" # executable | library
 
-[features]
-include_third_party = false
-link_what_you_use = true
-win32_executable = true
-macos_bundle = true
+[[project.sub]]
+name = ""
+version = "1.0.0"
+description = ""
+target_type = "EXE" # EXE | STATIC | SHARED 
+win32_executable = false
+macos_bundle = false
+
 
 [presets]
-# Non-Qt mode uses these compilers. Qt mode uses [qt].compiler/[qt].compilers
-# unless those are omitted, then it falls back to default_compiler.
-compilers = ["msvc", "clang", "gcc", "clang-cl"]
-default_compiler = "msvc"
-build_types = ["Debug", "RelWithDebInfo", "Release"]
-arch = "x64"
-generator = "Ninja"
-toolset = "v145"
-msvc_runtime = "MD" # MD | MT
 binary_dir = "${sourceDir}/out/build/${presetName}"
-install_dir = "${sourceDir}/out/install/${presetGroup}"
-generate_build_presets = true
-generate_test_presets = false
+architecture = "x64"               # "x64", "x86", "amd", "amd64"
+generator = "Ninja"                # See https://cmake.org/cmake/help/latest/manual/cmake-generators.7.html               
+msvc_runtime_mode = "MD"           # "MD", "MT"
+msvc_toolset = "v145"              # See https://cmake.com.cn/cmake/help/latest/variable/MSVC_VERSION.html#variable:MSVC_VERSION
 use_sanitizers = false
 
-[vcpkg]
-# root = "E:/Development/vcpkg"
-# static_triplet = "x64-windows-static-md"
-# dynamic_triplet = "x64-windows"
+[presets.user]
+install_dir = "${sourceDir}/out/install/${presetGroup}"
+compilers = ["clang-cl"]            # "msvc", "clang", "gcc", "clang-cl"
+build_types = ["Debug", "Release"]  # ["Debug", "RelWithDebInfo", "Release", "MinSizeRel"]
 
 [qt]
-enabled = false
+qt_enabled = false
 # sdk_dir = "E:/Qt/6.6.2/msvc2019_64"
-# compiler = "msvc"
-# compilers = ["msvc"]
 components = ["Widgets"]
-qml_debug = true
 
-[dependencies]
-# target_libraries = ["Qt${QT_VERSION_MAJOR}::Widgets"]
-# compile_definitions = [
-#   "PROJECT_DIRECTORY=\"${CMAKE_CURRENT_SOURCE_DIR}\"",
-# ]
-# copy_dynamic_libraries = ["grpc*", "cryptopp*"]
-
-# [[dependencies.vcpkg_packages]]
-# name = "grpc"
-# linkage = "DYNAMIC"
-# required = true
-# config = true
-# target_libraries = ["gRPC::grpc++"]
-
-# [[dependencies.find_packages]]
-# name = "OpenSSL"
-# required = true
-# config = true
-
-# [dependencies.system_libraries]
-# windows = ["rpcrt4", "usp10", "dwrite"]
+[code_runner]
+enabled = true
+# Single-file mode: "cmake" = build whole project, "direct" = quick compile+run
+cpp_mode = "cmake"
+run_in_terminal = true
+clear_previous_output = true
+# 多编译器时指定用哪个预设，空则自动取 compilers[0]
+# default_preset = "build-clang-cl_x64_Debug"

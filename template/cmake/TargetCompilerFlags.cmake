@@ -1,4 +1,7 @@
-﻿# -----------------------------------------------------------------------------
+﻿# Official documentation link for compiler option settings
+# https://learn.microsoft.com/zh-cn/cpp/build/reference/analyze-code-analysis?view=msvc-170
+
+# -----------------------------------------------------------------------------
 # Compiler-Specific Configuration(General)
 # -----------------------------------------------------------------------------
 if(COMPILER_MSVC_LIKE)
@@ -113,7 +116,8 @@ else()
 
     # GCC/Clang General Compilation Options (equivalent to MSVC)
     set(GCC_CLANG_COMPILE_GENERAL_OPTIONS
-        -std=c++${CMAKE_CXX_STANDARD}
+        $<$<COMPILE_LANGUAGE:CXX>:-std=c++${CMAKE_CXX_STANDARD}>
+        $<$<COMPILE_LANGUAGE:C>:-std=c${CMAKE_C_STANDARD}>
         # Character set (equivalent to /utf-8)
         -finput-charset=UTF-8
         -fexec-charset=UTF-8
@@ -162,6 +166,8 @@ else()
 		# ARM
 		# -mcpu=native
         -mfma
+		# -mllvm -unroll-count=n
+		# -mllvm -pragma-unroll-threshold=n
     )
 
     # 必须传播给使用者的选项（PUBLIC / INTERFACE）

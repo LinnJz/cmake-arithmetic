@@ -1,4 +1,7 @@
-﻿# -----------------------------------------------------------------------------
+﻿# Official documentation link for compiler option settings
+# https://learn.microsoft.com/zh-cn/cpp/build/reference/analyze-code-analysis?view=msvc-170
+	
+# -----------------------------------------------------------------------------
 # Compiler-Specific Configuration(General)
 # -----------------------------------------------------------------------------
 message(STATUS "CXX Compiler ID: ${CMAKE_CXX_COMPILER_ID}")
@@ -100,7 +103,8 @@ else()
 
     # GCC/Clang General Compilation Options (equivalent to MSVC)
     set(GCC_CLANG_COMPILE_GENERAL_OPTIONS
-        -std=c++${CMAKE_CXX_STANDARD}
+        $<$<COMPILE_LANGUAGE:CXX>:-std=c++${CMAKE_CXX_STANDARD}>
+        $<$<COMPILE_LANGUAGE:C>:-std=c${CMAKE_C_STANDARD}>
         # Character set (equivalent to /utf-8)
         -finput-charset=UTF-8
         -fexec-charset=UTF-8
@@ -154,6 +158,8 @@ else()
 		# ARM
 		# -mcpu=native
         -mfma
+		# -mllvm -unroll-count=n
+		# -mllvm -pragma-unroll-threshold=n
     )
     
     # C++20 Modules Support (equivalent to /experimental:module)
