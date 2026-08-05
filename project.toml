@@ -6,6 +6,11 @@ homepage_url = ""
 languages = ["C","CXX"]
 c_standard = 23
 cxx_standard = 23
+# 1. type: fixed, size: 0 <= size <= cpu.actual.max_size
+# 2. type: factor, size: 0.0 <= size <= 1.0
+# Watch out for floating-point multiplication truncation
+# Python automatic range correction
+jobs = { type = "fixed", size = 0 }
 
 [[project.sub]]
 name = ""

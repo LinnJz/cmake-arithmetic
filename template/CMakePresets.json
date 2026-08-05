@@ -154,7 +154,7 @@
     {
       "name": "build-base",
       "hidden": true,
-      "jobs": "#{BUILD_JOBS}"
+      "jobs": #{JOBS}
     }
   ]
 }

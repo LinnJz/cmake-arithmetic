@@ -37,6 +37,38 @@ def validate(config):
         sys.exit(1)
 
 
+def get_cpu_actual_max():
+    try:
+        return max(1, len(os.sched_getaffinity(0)))
+    except AttributeError:
+        return max(1, os.cpu_count() or 1)
+
+
+def resolve_jobs(config):
+    jobs = config.get("project", {}).get("jobs", {})
+    if not isinstance(jobs, dict):
+        print("Error: project.jobs must be a table, e.g. { type = \"fixed\", size = 0 }")
+        sys.exit(1)
+    cpu_max = get_cpu_actual_max()
+    jtype = jobs.get("type", "fixed")
+    if jtype == "fixed":
+        size = jobs.get("size", 0)
+        if not isinstance(size, int) or isinstance(size, bool):
+            print("Error: jobs.size must be an integer when type is 'fixed'")
+            sys.exit(1)
+        return max(0, min(size, cpu_max))
+    if jtype == "factor":
+        try:
+            size = float(jobs.get("size", 1.0))
+        except (TypeError, ValueError):
+            print("Error: jobs.size must be a number when type is 'factor'")
+            sys.exit(1)
+        size = max(0.0, min(1.0, size))
+        return max(0, min(int(round(cpu_max * size)), cpu_max))
+    print(f"Error: jobs.type '{jtype}' is not supported (use 'fixed' or 'factor')")
+    sys.exit(1)
+
+
 def get_subs(config):
     main_name = config.get("project", {}).get("name", "")
     subs = config.get("project", {}).get("sub", [])
@@ -339,6 +371,7 @@ def main():
         "ARCHITECTURE": presets.get("architecture", "x64"),
         "MSVC_RUNTIME_MODE": presets.get("msvc_runtime_mode", "MD"),
         "MSVC_TOOLSET": presets.get("msvc_toolset", "v145"),
+        "JOBS": resolve_jobs(config),
     }
 
     if OUTPUT_DIR.exists():

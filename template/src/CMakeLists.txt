@@ -78,9 +78,9 @@ target_sources(${PROJECT_NAME} PRIVATE
 )
 
 # 2.1 模块依赖（一个项目只能有一个std module，或许应该提到全局CMakeLists.txt？）
-# if(CMAKE_CXX_STANDARD GREATER_EQUAL 20)
-#     include(../cmake/CxxModules.cmake)
-# endif()
+if(CMAKE_CXX_STANDARD GREATER_EQUAL 20)
+    include(../cmake/CxxModules.cmake)
+endif()
 include(../cmake/TargetCompilerFlags.cmake)
 
 # 3. 包含路径

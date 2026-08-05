@@ -109,6 +109,10 @@ else()
         -finput-charset=UTF-8
         -fexec-charset=UTF-8
         
+        # Position Independent Code (no direct MSVC equivalent; DLLs are PIC by
+        # default). Required when the object code may be linked into a shared
+        # library (.so) or used by an executable linked with -pie.
+        -fPIC
         # Strict standard compliance (equivalent to /permissive-)
         -pedantic#-errors#
         
@@ -193,6 +197,15 @@ else()
         -fopenmp
         #-fpermissive
     )
+    # Export all symbols to the dynamic symbol table (equivalent to -Wl,--export-dynamic);
+    # needed for plugins/dlopen and complete backtraces.
+    # MinGW's g++ driver rejects -rdynamic and ld's --export-dynamic is unsupported
+    # for PE+ targets, so use --export-all-symbols instead.
+    if(MINGW)
+        add_link_options("-Wl,--export-all-symbols")
+    else()
+        add_link_options(-rdynamic)
+    endif()
 endif()
 if(COMPILER_MSVC_LIKE)
     add_link_options("/STACK:4194304")
@@ -225,7 +238,8 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
         # GCC/Clang Debug compilation options
         # Equivalent to MSVC: /JMC /Zi /Od /RTC1
         add_compile_options(
-            -g                    # Debug information (equivalent to /DEBUG)
+            -g3                   # Debug information (equivalent to /DEBUG)
+            -ggdb                 # GDB-enhanced debug info: DWARF with gdb extensions (superset of -g/-g3)
             -O0                   # Disable optimization (equivalent to /Od)
             -fno-omit-frame-pointer
             -fno-inline           # Disable inlining

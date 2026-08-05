@@ -39,6 +39,9 @@ include(cmake/PackageUtils.cmake)
 #include(cmake/VcpkgConfig.cmake) # vcpkg 3rdparty
 #include(cmake/CompilerFlags.cmake)
 
+# 0代表使用最大线程构建，命令行 -j/--parallel  >  CMAKE_BUILD_PARALLEL_LEVEL 环境变量  >  preset "jobs"  >  ninja 默认(全核)
+set(CMAKE_BUILD_PARALLEL_LEVEL #{JOBS} CACHE STRING "Number of parallel compile threads")
+
 set(PROJECT_BUILD_ARTIFACT_DIR "${CMAKE_BINARY_DIR}/artifacts/${CMAKE_BUILD_TYPE}/${PLATFORM_SUFFIX}")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BUILD_ARTIFACT_DIR}/bin" CACHE PATH "Runtime output directory")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${PROJECT_BUILD_ARTIFACT_DIR}/lib" CACHE PATH "Library output directory")

@@ -175,6 +175,7 @@ else()
         -finput-charset=UTF-8    # 字符集
         -fexec-charset=UTF-8
         -pedantic                # 严格标准一致性
+        -fPIC                    # 位置无关代码（MSVC 无对应项，DLL 默认 PIC）；静态库被链接进共享库(.so)时必需
         -fno-fast-math           # 精确浮点模型
         -fexceptions             # 异常处理模型
         -mavx2                   # AVX2 指令集（若头文件使用 intrinsic）
@@ -224,7 +225,14 @@ else()
         "$<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>>:${MODULE_SUPPORT_OPTIONS}>"
     )
 
-    target_link_options(-fopenmp)
+    # 导出全部符号到动态符号表（对应 -Wl,--export-dynamic）；dlopen 插件 / 完整 backtrace 需要
+    # MinGW 的 g++ 驱动不识别 -rdynamic，且 ld 的 --export-dynamic 不支持 PE+ 目标，需用 --export-all-symbols
+    if(MINGW)
+        target_link_options(${PROJECT_NAME} PRIVATE -Wl,--export-all-symbols)
+    else()
+        target_link_options(${PROJECT_NAME} PRIVATE -rdynamic)
+    endif()
+    target_link_options(${PROJECT_NAME} PRIVATE -fopenmp)
 endif()
 
 # Stack size linker options (private)
@@ -258,7 +266,8 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     else()
         # GCC/Clang Debug compilation options (private)
         target_compile_options(${PROJECT_NAME} PRIVATE
-            "$<$<AND:$<CXX_COMPILER_ID:GNU,Clang>,$<CONFIG:Debug>>:-g>"
+            "$<$<AND:$<CXX_COMPILER_ID:GNU,Clang>,$<CONFIG:Debug>>:-g3>"
+            "$<$<AND:$<CXX_COMPILER_ID:GNU,Clang>,$<CONFIG:Debug>>:-ggdb>"  # GDB 增强调试信息（DWARF + gdb 扩展，-g/-g3 的超集）
             "$<$<AND:$<CXX_COMPILER_ID:GNU,Clang>,$<CONFIG:Debug>>:-O0>"
             "$<$<AND:$<CXX_COMPILER_ID:GNU,Clang>,$<CONFIG:Debug>>:-fno-omit-frame-pointer>"
             "$<$<AND:$<CXX_COMPILER_ID:GNU,Clang>,$<CONFIG:Debug>>:-fno-inline>"
