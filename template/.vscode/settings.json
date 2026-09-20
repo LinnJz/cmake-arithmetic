@@ -11,6 +11,8 @@
   "workbench.preferredDarkColorTheme": "Visual Studio Light", // 工作台主题
   "workbench.iconTheme": "vscode-jetbrains-icon-theme-2023-light",
   "workbench.colorTheme": "JetBrains Rider New UI Lighter",
+  "workbench.editor.useModal": "off",
+  "workbench.experimental.modernUI": true,
   // ==================== 2. 编辑器交互 (Editor Interaction) ====================
   "editor.autoClosingBrackets": "always", // 自动闭合括号
   "editor.cursorBlinking": "smooth", // 光标闪烁样式
@@ -37,185 +39,30 @@
   "editor.insertFinalNewline": true, // 文件末尾插入空行
   "editor.wrapText": false, // 文本不换行
   "files.eol": "\n", // 换行符 LF
+  "files.trimTrailingWhitespace": true,  // 删除尾部空格
   // ==================== 5. 差异编辑器 (Diff Editor) ====================
   "diffEditor.codeLens": true, // 差异编辑器中显示代码透镜
-  // ==================== 6. CMake 工具集成 (CMake) ====================
-  "cmake.additionalBuildProblemMatchers": [], // 额外构建问题匹配器
-  "cmake.allowCommentsInPresetsFile": true, // 允许 CMakePresets.json 注释
-  "cmake.buildBeforeRun": true, // 运行前先构建
-  "cmake.clearOutputBeforeBuild": true, // 构建前清输出
-  "cmake.copyCompileCommands": "${workspaceFolder}/compile_commands.json", // 导出 compile_commands.json
-  "cmake.enabledOutputParsers": [
-    "cmake",
-    "gcc",
-    "msvc"
-  ], // 输出解析器
-  "cmake.modifyLists.addNewSourceFiles": "ask", // 新建文件自动更新 CMakeLists.txt
-  "cmake.modifyLists.removeDeletedSourceFiles": "ask", // 删除文件自动清理 CMakeLists.txt
-  "cmake.parallelJobs": 0, // 并行作业数(0=自动)
-  "cmake.parseBuildDiagnostics": true, // 解析编译器输出
-  "cmake.saveBeforeBuild": true, // 构建前保存文件
-  "cmake.ctest.testExplorerIntegrationEnabled": true, // 测试资源管理器集成
-  // ==================== 7. Code Runner ====================
-  "code-runner.clearPreviousOutput": true, // 每次运行前清空输出
-  "code-runner.fileDirectoryAsCwd": true, // 以文件所在目录为工作目录
-  "code-runner.ignoreSelection": true, // 始终运行整个文件
-  "code-runner.runInTerminal": true, // 在终端运行（支持交互输入）
-  "code-runner.saveAllFilesBeforeRun": true, // 运行前自动保存
-  "code-runner.preserveFocus": false, // 运行后焦点切到终端
-  "code-runner.respectShebang": true, // 尊重 #! 解释器指令
-  // ==================== 8. clangd ====================
-  "clangd.arguments": [
-    "--header-insertion=never",
-    "--background-index",
-    "--pch-storage=memory",
-    "--limit-results=50",
-    "--limit-references=1000",
-    "-j=4"
-  ],
-  "clangd.fallbackFlags": [
-    "-std=c++23",
-    "-g",
-    "-lpthread"
-  ], // 无编译数据库时的回退标志
+  "diffEditor.renderSideBySide": true, // 差异对比分栏显示
+  // ==================== 6. Git 集成与 GitLens (Git Integration & GitLens) ====================
+  "scm.diffDecorations": "all", // Git 修改标记: all=装订线+滚动条, gutter=仅装订线, overview=仅滚动条, none=关闭
+  "git.diffDecorationsGutterWidth": 3, // 装订线修改标记宽度 (1~5)
+  "git.diffDecorationsGutterVisibility": "always", // 装订线标记显示时机: always/hover/active
+  "git.decorations.enabled": true, // 文件树显示 M/U/A 标记
+  "gitlens.ai.model": "gitkraken",
+  "gitlens.ai.gitkraken.model": "gemini:gemini-2.5-flash",
+  "gitlens.hovers.currentLine.over": "line",
+  "workbench.colorCustomizations": {
+    // Gutter indicators (left)
+    "editorGutter.modifiedBackground": "#00c3ff",
+    "editorGutter.addedBackground": "#e6ff05",
+    "editorGutter.deletedBackground": "#ff0af3",
+    // Scrollbar indicators (right)
+    "editorOverviewRuler.addedForeground": "#ff5100",
+    "editorOverviewRuler.modifiedForeground": "#003cff",
+    "editorOverviewRuler.deletedForeground": "#ff0505"
+  },
+  // ==================== 7. C++ 语义着色 (Semantic Token Colors) ====================
   "editor.semanticHighlighting.enabled": false, // 语义高亮
-  "clangd.onConfigChanged": "restart", // 配置文件变更时重启
-  // ==================== 9. LLDB 调试器 ====================
-  "lldb.evaluateForHovers": true, // 悬停显示变量值
-  "lldb.dereferencePointers": true, // 指针显示解引用值
-  "lldb.displayFormat": "auto", // 变量显示格式
-  "lldb.suppressMissingSourceFiles": true, // 隐藏缺失源文件提示
-  "lldb.commandCompletions": true, // 调试控制台命令补全
-  "lldb.consoleMode": "commands", // 控制台默认调试命令模式
-  "lldb.evaluationTimeout": 10, // 表达式求值超时(秒)
-  // ==================== 10. Doxygen 文档生成 (doxdocgen) ====================
-  // 命令风格
-  "doxdocgen.generic.commandSuggestionAddPrefix": true, // 命令建议加 @ 前缀
-  // 文件头
-  "doxdocgen.file.fileOrder": [
-    "file",
-    "author",
-    "brief",
-    "version",
-    "date",
-    "empty",
-    "copyright",
-    "empty",
-    "custom"
-  ],
-  "doxdocgen.file.copyrightTag": [
-    "@copyright Copyright (c) {year}"
-  ],
-  "doxdocgen.file.versionTag": "@version 0.1",
-  "doxdocgen.file.fileTemplate": "@file {name}",
-  // 作者信息
-  "doxdocgen.generic.authorName": "your name",
-  "doxdocgen.generic.authorEmail": "your@email.com",
-  "doxdocgen.generic.authorTag": "@author {author} ({email})",
-  // 日期
-  "doxdocgen.generic.dateFormat": "YYYY-MM-DD",
-  "doxdocgen.generic.dateTemplate": "@date {date}",
-  // 注释模板
-  "doxdocgen.generic.briefTemplate": "@brief {text}",
-  "doxdocgen.generic.paramTemplate": "@param {param} ",
-  "doxdocgen.generic.returnTemplate": "@return {type} ",
-  "doxdocgen.cpp.tparamTemplate": "@tparam {param} ",
-  // 注释块顺序
-  "doxdocgen.generic.order": [
-    "brief",
-    "empty",
-    "tparam",
-    "param",
-    "return",
-    "custom"
-  ],
-  // C 风格注释
-  "doxdocgen.c.firstLine": "/**",
-  "doxdocgen.c.lastLine": " */",
-  "doxdocgen.c.commentPrefix": " * ",
-  // 智能文本
-  "doxdocgen.generic.boolReturnsTrueFalse": true,
-  "doxdocgen.cpp.ctorText": "Construct a new {name} object",
-  "doxdocgen.cpp.dtorText": "Destroy the {name} object",
-  // ==================== 11. Color Highlight ====================
-  "color-highlight.enable": true, // 启用颜色高亮
-  "color-highlight.languages": [
-    "*"
-  ], // 所有语言
-  "color-highlight.markerType": "background", // 背景高亮
-  "color-highlight.markRuler": true, // 滚动条上显示颜色
-  "color-highlight.matchWords": true, // 高亮颜色关键词
-  "color-highlight.matchRgbWithNoFunction": true, // 高亮 RGB 无函数写法
-  "color-highlight.matchHslWithNoFunction": true, // 高亮 HSL 无函数写法
-  // ==================== 12. Error Lens ====================
-  "errorLens.enabled": true, // 启用行内错误显示
-  "errorLens.enabledDiagnosticLevels": [
-    "error",
-    "warning",
-    "info",
-    "hint"
-  ], // 显示所有级别
-  "errorLens.messageEnabled": true, // 显示错误消息
-  "errorLens.messageBackgroundMode": "line", // 整行背景高亮
-  "errorLens.gutterIconsEnabled": true, // 行号左侧图标
-  "errorLens.statusBarIconsEnabled": true, // 状态栏错误计数
-  "errorLens.statusBarMessageEnabled": true, // 状态栏错误消息
-  "errorLens.fontWeight": "bold", // 加粗
-  "errorLens.removeLinebreaks": true, // 多行合并为一行
-  "errorLens.onSave": false, // 实时更新
-  "errorLens.followCursor": "allLines", // 所有行显示
-  // ==================== 13. Markdown All in One ====================
-  "markdown.extension.completion.enabled": true, // 路径补全
-  "markdown.extension.showActionButtons": true, // 工具栏按钮
-  "markdown.extension.preview.autoShowPreviewToSide": true, // 自动预览
-  "markdown.extension.tableFormatter.enabled": true, // 表格格式化
-  "markdown.extension.tableFormatter.delimiterRowNoPadding": true, // 表格分隔线填满
-  "markdown.extension.toc.levels": "2..4", // 目录级别范围
-  "markdown.extension.math.enabled": true, // 数学公式
-  "markdown.extension.print.onFileSave": false, // 保存不自动打印
-  // ==================== 14. Markdown Preview Enhanced ====================
-  "markdown-preview-enhanced.automaticallyShowPreviewOfMarkdownBeingEdited": true, // 自动预览
-  "markdown-preview-enhanced.breakOnSingleNewLine": true, // GFM 换行
-  "markdown-preview-enhanced.enablePreviewZenMode": true, // 精简 UI
-  "markdown-preview-enhanced.previewTheme": "github-light.css", // 预览主题
-  "markdown-preview-enhanced.codeBlockTheme": "auto.css", // 代码块主题自动匹配
-  "markdown-preview-enhanced.enableEmojiSyntax": true, // Emoji
-  "markdown-preview-enhanced.enableWikiLinkSyntax": true, // Wiki 链接
-  "markdown-preview-enhanced.enableTagSyntax": true, // Obsidian 标签
-  "markdown-preview-enhanced.enableImageLightbox": true, // 图片灯箱
-  "markdown-preview-enhanced.scrollSync": true, // 同步滚动
-  "markdown-preview-enhanced.liveUpdate": true, // 实时更新预览
-  "markdown-preview-enhanced.mathRenderingOption": "KaTeX", // 数学渲染
-  "markdown-preview-enhanced.hideDefaultVSCodeMarkdownPreviewButtons": true, // 隐藏自带预览按钮
-  // ==================== 15. markdownlint ====================
-  "markdownlint.focusMode": true, // 输入时隐藏附近 lint
-  "markdownlint.run": "onType", // 输入时检查
-  "markdownlint.config": {
-    "MD013": false, // 关闭行长度限制
-    "MD033": false, // 允许内联 HTML
-    "MD024": false, // 允许重复标题
-    "MD046": false // 允许不同代码块风格
-  },
-  // ==================== 16. cSpell (拼写检查) ====================
-  "cSpell.autocorrect": true, // 自动修正键入错误
-  "cSpell.fixSpellingWithRenameProvider": true, // 重命名修复拼写
-  "cSpell.showSuggestionsLinkInEditorContextMenu": true, // 右键菜单显示建议
-  "cSpell.diagnosticLevel": "Warning", // 问题面板可见度, Hint, Warning
-  "cSpell.minWordLength": 4, // 检查 n 字母以上
-  "cSpell.customDictionaries": { // 项目词库
-    "project-words": {
-      "name": "project-words",
-      "path": "${workspaceRoot}/.cspell/project-words.txt",
-      "addWords": true,
-      "description": "Project-specific words"
-    }
-  },
-  // ==================== 17. Chat & AI ====================
-  "chat.disableAIFeatures": true, // 禁用 AI 功能
-  // ==================== 18. Path Intellisense ====================
-  "path-intellisense.autoSlashAfterDirectory": true, // 目录后自动加斜杠
-  "path-intellisense.ignoreTsConfigBaseUrl": true, // 忽略 tsconfig baseUrl
-  // ==================== 19. C++ 语义着色 (Semantic Token Colors) ====================
   "editor.semanticTokenColorCustomizations": {
     "rules": {
       "templateType:cpp": {
@@ -308,7 +155,7 @@
       }*/
     }
   },
-  // ==================== 20. TextMate 语法着色 (Token Color Customizations) ====================
+  // ==================== 8. TextMate 语法着色 (Token Color Customizations) ====================
   "editor.tokenColorCustomizations": {
     "textMateRules": [
       // 1. 预处理器指令 (Preprocessor Directives)
@@ -482,6 +329,8 @@
       {
         // 自定义类型/别名
         "scope": [
+          "entity.name.scope-resolution.function.call.cpp",
+          "entity.name.scope-resolution.function.definition.cpp",
           "entity.name.type.cpp",
           "entity.name.type.alias.cpp",
           "storage.type.template.argument"
@@ -584,8 +433,10 @@
           "storage.modifier.specifier.functional.post-parameters.final.cpp",
           "storage.modifier.specifier.functional.post-parameters.noexcept.cpp",
           "storage.modifier.specifier.functional.post-parameters.override.cpp",
+		  "storage.modifier.specifier.functional.post-parameters.const.cpp",
           "storage.modifier.specifier.functional.pre-parameters.explicit.cpp",
           "storage.modifier.specifier.functional.pre-parameters.friend.cpp",
+		  "storage.modifier.specifier.functional.pre-parameters.inline.cpp",
           "storage.modifier.specifier.functional.pre-parameters.mutable.cpp",
           "storage.modifier.specifier.functional.pre-parameters.virtual.cpp",
           "storage.modifier.specifier.functional.pre-parameters.constexpr.cpp",
@@ -602,6 +453,7 @@
           "storage.type.modifier.access.control.private.cpp",
           "storage.type.modifier.access.control.protected.cpp",
           "storage.type.modifier.access.control.public.cpp",
+          "storage.modifier.cpp",
           /*"storage.type.modifier.access.public.cpp",
           "storage.type.modifier.access.private.cpp",
           "storage.type.modifier.access.protected.cpp",*/
@@ -616,6 +468,14 @@
           "variable.language.this.cpp",
           "variable.other.unknown.import.cpp",
           "variable.other.object.access.noexcept.cpp",
+          "variable.other.unknown.using.cpp",
+          "variable.other.unknown.class.cpp",
+          "variable.other.unknown.template.cpp",
+          "variable.other.unknown.typename.cpp",
+          "variable.other.unknown.struct.cpp",
+          "variable.other.unknown.union.cpp",
+		  "variable.other.unknown.requires.cpp",
+		  "storage.type.namespace.directive.cpp",
         ],
         "settings": {
           "foreground": "#0000EE"
@@ -889,10 +749,185 @@
       },
     ]
   },
-  // ==================== 21. gitlens ====================
-  "gitlens.ai.model": "gitkraken",
-  "gitlens.ai.gitkraken.model": "gemini:gemini-2.5-flash",
-  "gitlens.hovers.currentLine.over": "line",
+  // ==================== 9. clangd ====================
+  "clangd.arguments": [
+    "--header-insertion=never",
+    "--background-index",
+    "--pch-storage=memory",
+    "--limit-results=50",
+    "--limit-references=1000",
+    "-j=4"
+  ],
+  "clangd.fallbackFlags": [
+    "-std=c++23",
+    "-g",
+    "-lpthread"
+  ], // 无编译数据库时的回退标志
+  "clangd.onConfigChanged": "restart", // 配置文件变更时重启
+  // ==================== 10. LLDB 调试器 ====================
+  "lldb.evaluateForHovers": true, // 悬停显示变量值
+  "lldb.dereferencePointers": true, // 指针显示解引用值
+  "lldb.displayFormat": "auto", // 变量显示格式
+  "lldb.suppressMissingSourceFiles": true, // 隐藏缺失源文件提示
+  "lldb.commandCompletions": true, // 调试控制台命令补全
+  "lldb.consoleMode": "commands", // 控制台默认调试命令模式
+  "lldb.evaluationTimeout": 10, // 表达式求值超时(秒)
+  // ==================== 11. CMake 工具集成 (CMake) ====================
+  "cmake.additionalBuildProblemMatchers": [], // 额外构建问题匹配器
+  "cmake.allowCommentsInPresetsFile": true, // 允许 CMakePresets.json 注释
+  "cmake.buildBeforeRun": true, // 运行前先构建
+  "cmake.clearOutputBeforeBuild": true, // 构建前清输出
+  "cmake.copyCompileCommands": "${workspaceFolder}/compile_commands.json", // 导出 compile_commands.json
+  "cmake.enabledOutputParsers": [
+    "cmake",
+    "gcc",
+    "msvc"
+  ], // 输出解析器
+  "cmake.modifyLists.addNewSourceFiles": "ask", // 新建文件自动更新 CMakeLists.txt
+  "cmake.modifyLists.removeDeletedSourceFiles": "ask", // 删除文件自动清理 CMakeLists.txt
+  "cmake.parallelJobs": 0, // 并行作业数(0=自动)
+  "cmake.parseBuildDiagnostics": true, // 解析编译器输出
+  "cmake.saveBeforeBuild": true, // 构建前保存文件
+  "cmake.ctest.testExplorerIntegrationEnabled": true, // 测试资源管理器集成
+  // ==================== 12. Code Runner ====================
+  "code-runner.clearPreviousOutput": true, // 每次运行前清空输出
+  "code-runner.fileDirectoryAsCwd": true, // 以文件所在目录为工作目录
+  "code-runner.ignoreSelection": true, // 始终运行整个文件
+  "code-runner.runInTerminal": true, // 在终端运行（支持交互输入）
+  "code-runner.saveAllFilesBeforeRun": true, // 运行前自动保存
+  "code-runner.preserveFocus": false, // 运行后焦点切到终端
+  "code-runner.respectShebang": true, // 尊重 #! 解释器指令
+  // 切换构建模式请使用 CMake 扩展状态栏的预设选择器
+  // Switch build mode via CMake Tools status bar preset selector
+  "code-runner.executorMapByGlob": {
+    "CMakeLists.txt": "cd $workspaceRoot && cmake --build --preset build-clang-cl_x64_Debug"
+  },
+  "code-runner.executorMap": {
+    "cpp": "cd $workspaceRoot && cmake --build --preset build-clang-cl_x64_Debug",
+    "c": "cd $workspaceRoot && cmake --build --preset build-clang-cl_x64_Debug"
+  },
+  // ==================== 13. Doxygen 文档生成 (doxdocgen) ====================
+  // 命令风格
+  "doxdocgen.generic.commandSuggestionAddPrefix": true, // 命令建议加 @ 前缀
+  // 文件头
+  "doxdocgen.file.fileOrder": [
+    "file",
+    "author",
+    "brief",
+    "version",
+    "date",
+    "empty",
+    "copyright",
+    "empty",
+    "custom"
+  ],
+  "doxdocgen.file.copyrightTag": [
+    "@copyright Copyright (c) {year}"
+  ],
+  "doxdocgen.file.versionTag": "@version 0.1",
+  "doxdocgen.file.fileTemplate": "@file {name}",
+  // 作者信息
+  "doxdocgen.generic.authorName": "your name",
+  "doxdocgen.generic.authorEmail": "your@email.com",
+  "doxdocgen.generic.authorTag": "@author {author} ({email})",
+  // 日期
+  "doxdocgen.generic.dateFormat": "YYYY-MM-DD",
+  "doxdocgen.generic.dateTemplate": "@date {date}",
+  // 注释模板
+  "doxdocgen.generic.briefTemplate": "@brief {text}",
+  "doxdocgen.generic.paramTemplate": "@param {param} ",
+  "doxdocgen.generic.returnTemplate": "@return {type} ",
+  "doxdocgen.cpp.tparamTemplate": "@tparam {param} ",
+  // 注释块顺序
+  "doxdocgen.generic.order": [
+    "brief",
+    "empty",
+    "tparam",
+    "param",
+    "return",
+    "custom"
+  ],
+  // C 风格注释
+  "doxdocgen.c.firstLine": "/**",
+  "doxdocgen.c.lastLine": " */",
+  "doxdocgen.c.commentPrefix": " * ",
+  // 智能文本
+  "doxdocgen.generic.boolReturnsTrueFalse": true,
+  "doxdocgen.cpp.ctorText": "Construct a new {name} object",
+  "doxdocgen.cpp.dtorText": "Destroy the {name} object",
+  // ==================== 14. Markdown All in One ====================
+  "markdown.extension.completion.enabled": true, // 路径补全
+  "markdown.extension.showActionButtons": true, // 工具栏按钮
+  "markdown.extension.preview.autoShowPreviewToSide": true, // 自动预览
+  "markdown.extension.tableFormatter.enabled": true, // 表格格式化
+  "markdown.extension.tableFormatter.delimiterRowNoPadding": true, // 表格分隔线填满
+  "markdown.extension.toc.levels": "2..4", // 目录级别范围
+  "markdown.extension.math.enabled": true, // 数学公式
+  "markdown.extension.print.onFileSave": false, // 保存不自动打印
+  // ==================== 15. Markdown Preview Enhanced ====================
+  "markdown-preview-enhanced.automaticallyShowPreviewOfMarkdownBeingEdited": true, // 自动预览
+  "markdown-preview-enhanced.breakOnSingleNewLine": true, // GFM 换行
+  "markdown-preview-enhanced.enablePreviewZenMode": true, // 精简 UI
+  "markdown-preview-enhanced.previewTheme": "github-light.css", // 预览主题
+  "markdown-preview-enhanced.codeBlockTheme": "auto.css", // 代码块主题自动匹配
+  "markdown-preview-enhanced.enableEmojiSyntax": true, // Emoji
+  "markdown-preview-enhanced.enableWikiLinkSyntax": true, // Wiki 链接
+  "markdown-preview-enhanced.enableTagSyntax": true, // Obsidian 标签
+  "markdown-preview-enhanced.enableImageLightbox": true, // 图片灯箱
+  "markdown-preview-enhanced.scrollSync": true, // 同步滚动
+  "markdown-preview-enhanced.liveUpdate": true, // 实时更新预览
+  "markdown-preview-enhanced.mathRenderingOption": "KaTeX", // 数学渲染
+  "markdown-preview-enhanced.hideDefaultVSCodeMarkdownPreviewButtons": true, // 隐藏自带预览按钮
+  // ==================== 16. markdownlint ====================
+  "markdownlint.focusMode": true, // 输入时隐藏附近 lint
+  "markdownlint.run": "onType", // 输入时检查
+  "markdownlint.config": {
+    "MD013": false, // 关闭行长度限制
+    "MD033": false, // 允许内联 HTML
+    "MD024": false, // 允许重复标题
+    "MD046": false // 允许不同代码块风格
+  },
+  // ==================== 17. Color Highlight ====================
+  "color-highlight.enable": true, // 启用颜色高亮
+  "color-highlight.languages": [
+    "*"
+  ], // 所有语言
+  "color-highlight.markerType": "background", // 背景高亮
+  "color-highlight.markRuler": true, // 滚动条上显示颜色
+  "color-highlight.matchWords": true, // 高亮颜色关键词
+  "color-highlight.matchRgbWithNoFunction": true, // 高亮 RGB 无函数写法
+  "color-highlight.matchHslWithNoFunction": true, // 高亮 HSL 无函数写法
+  // ==================== 18. Error Lens ====================
+  "errorLens.enabled": true, // 启用行内错误显示
+  "errorLens.enabledDiagnosticLevels": [
+    "error",
+    "warning",
+    "info",
+    "hint"
+  ], // 显示所有级别
+  "errorLens.messageEnabled": true, // 显示错误消息
+  "errorLens.messageBackgroundMode": "line", // 整行背景高亮
+  "errorLens.gutterIconsEnabled": true, // 行号左侧图标
+  "errorLens.statusBarIconsEnabled": true, // 状态栏错误计数
+  "errorLens.statusBarMessageEnabled": true, // 状态栏错误消息
+  "errorLens.fontWeight": "bold", // 加粗
+  "errorLens.removeLinebreaks": true, // 多行合并为一行
+  "errorLens.onSave": false, // 实时更新
+  "errorLens.followCursor": "allLines", // 所有行显示
+  // ==================== 19. cSpell (拼写检查) ====================
+  "cSpell.autocorrect": true, // 自动修正键入错误
+  "cSpell.fixSpellingWithRenameProvider": true, // 重命名修复拼写
+  "cSpell.showSuggestionsLinkInEditorContextMenu": true, // 右键菜单显示建议
+  "cSpell.diagnosticLevel": "Warning", // 问题面板可见度, Hint, Warning
+  "cSpell.minWordLength": 4, // 检查 n 字母以上
+  "cSpell.customDictionaries": { // 项目词库
+    "project-words": {
+      "name": "project-words",
+      "path": "${workspaceRoot}/.cspell/project-words.txt",
+      "addWords": true,
+      "description": "Project-specific words"
+    }
+  },
   "cSpell.words": [
     "3rdparty",
     "AUTOMOC",
@@ -975,6 +1010,34 @@
     "webp",
     "winrt"
   ],
-  "workbench.editor.useModal": "off",
-  "workbench.experimental.modernUI": true,
+  // ==================== 20. Path Intellisense ====================
+  "path-intellisense.autoSlashAfterDirectory": true, // 目录后自动加斜杠
+  "path-intellisense.ignoreTsConfigBaseUrl": true, // 忽略 tsconfig baseUrl
+  // ==================== 21. Chat & AI ====================
+  "chat.disableAIFeatures": true, // 禁用 AI 功能
+  // ==================== 22.  ====================
+  "search.exclude": {
+    "**/.git": true,
+    "**/tmp": true,
+    "**/temp": true,
+    "**/dist": true,
+    "**/build": true,
+    "**/install": true,
+    "**/out": true,
+    "**/node_modules": true,
+    "**/bower_components": true,
+    "**/*.code-search": true,
+    "**/venv": true,
+    "**/.venv": true,
+    "**/env": true,
+    "**/__pycache__": true,
+    "**/.mypy_cache": true,
+    "**/.pytest_cache": true,
+    "**/target": true,
+    "**/.idea": true,
+    "**/*.iml": true,
+    "**/bin": true,
+    "**/obj": true,
+    "**/.vs": true,
+  },
 }
